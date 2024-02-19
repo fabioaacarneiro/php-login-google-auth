@@ -40,14 +40,15 @@ abstract class User
         $stmt->execute(array(':id' => $id));
     }
 
-    public static function select(int $quantity = null)
+    public static function select(string $last = true, int $quantity = null)
     {
         if (is_null($quantity)) {
             $stmt = static::$pdo->prepare("SELECT * FROM public.users");
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $users;
         } else {
-            $stmt = static::$pdo->prepare("SELECT * FROM public.users ORDER BY id DESC LIMIT $quantity");
+            $order = ($last) ? "DESC" : "ASC";
+            $stmt = static::$pdo->prepare("SELECT * FROM public.users ORDER BY id $order LIMIT $quantity");
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $users;
         }
