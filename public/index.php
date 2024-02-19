@@ -11,7 +11,7 @@ $googleClient->authorized();
 
 $authUrl = $googleClient->generateAuthLink();
 
-Connection::initConn();
+Connection::initConnection();
 
 ?>
 
@@ -21,16 +21,19 @@ Connection::initConn();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/styles.css">
     <title>Document</title>
 </head>
 
 <body>
-    <form action="">
-        <input type="text" name="email" placeholder="email">
-        <input type="text" name="password" placeholder="password">
-        <button type="submit">Login</button>
-        <a href="<?php echo $authUrl ?>">Login with google</a>
-    </form>
+    <div class="container">
+        <form class="form-container" action="">
+            <input class="form-input" type="text" name="email" placeholder="email">
+            <input class="form-input" type="text" name="password" placeholder="password">
+            <button class="btn btn-primary" type="submit">Login</button>
+            <a class="btn btn-primary" href="<?php echo $authUrl ?>">Login with google</a>
+        </form>
+    </div>
 </body>
 
 </html>

@@ -16,7 +16,7 @@ abstract class Connection
     private static $password = "";
     private static $database = "";
 
-    public static function initConn()
+    public static function initConnection()
     {
         $dotenv = Dotenv::createImmutable(__DIR__ . "/../..");
         $dotenv->load();
@@ -28,6 +28,21 @@ abstract class Connection
         static::$user = $_ENV["USER_POSTGRES"];
         static::$password = $_ENV["PASSWORD_POSTGRES"];
 
+        $pdo = static::getConnection();
+        
+        // id firstName lastName email password avatar
+        $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                firstName VARCHAR(50),
+                lastName VARCHAR(50),
+                email VARCHAR(150),
+                password VARCHAR(255),
+                avatar VARCHAR(255)
+            )");
+    }
+
+    public static function getConnection()
+    {
         $pdo = new PDO(
             static::$dbSystem .
                 ":host=" . static::$host .
@@ -38,14 +53,6 @@ abstract class Connection
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
 
-        // id firstName lastName email password avatar
-        $pdo->exec("CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                firstName VARCHAR(50),
-                lastName VARCHAR(50),
-                email VARCHAR(150),
-                password VARCHAR(255),
-                avatar VARCHAR(255)
-            )");
+        return $pdo;
     }
 }
