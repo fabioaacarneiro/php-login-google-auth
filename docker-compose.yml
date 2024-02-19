@@ -1,0 +1,83 @@
+networks:
+  # Internal network
+  internal:
+    driver: bridge
+
+# Volumes
+volumes:
+  pgsql:
+  pgadmin:
+    driver: local
+
+services:
+
+  apache:
+    image: webdevops/php-apache-dev:8.2-alpine
+    restart: always
+    container_name: apache
+    networks:
+      - internal
+    working_dir: /var/www/app
+    volumes:
+      - .:/var/www/app
+    depends_on:
+      - postgres
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/app/public/
+      - XDEBUG_MODE=develop,debug
+      - XDEBUG_START_WITH_REQUEST=yes
+      - XDEBUG_DISCOVER_CLIENT_HOST=0
+      - XDEBUG_CLIENT_HOST=host.docker.internal
+      - XDEBUG_IDE_KEY=VSCODE
+      - XDEBUG_REMOTE_CONNECT_BACK=1
+      - PHP_DATE_TIMEZONE=UTC
+      - PHP_DISPLAY_ERRORS=1
+      - WEB_DOCUMENT_INDEX=index.php
+      - PHP_MEMORY_LIMIT=2048M
+      - PHP_MAX_EXECUTION_TIME=86400
+      - PHP_POST_MAX_SIZE=500M
+      - PHP_UPLOAD_MAX_FILESIZE=500M
+      - php.variables_order=EGPCS
+    expose:
+      - 9003
+    ports:
+      - 80:80
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: dbpgsql
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - 'pgsql:/var/lib/postgresql/data'
+    networks:
+      - internal
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - '-q'
+        - '-d'
+        - '${DB_DATABASE}'
+        - '-U'
+        - '${DB_USERNAME}'
+      retries: 3
+      timeout: 5s
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "fabioaacarneiro@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadminsenha"
+    ports:
+      - "16544:80"
+    depends_on:
+      - postgres
+    networks:
+      - internal
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+      - .:/var/www/app/
