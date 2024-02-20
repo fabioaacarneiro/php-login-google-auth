@@ -2,6 +2,7 @@
 
 use app\database\Connection;
 use app\library\GoogleClient;
+use app\models\User;
 
 require "../vendor/autoload.php";
 
@@ -12,6 +13,9 @@ $googleClient->authorized();
 $authUrl = $googleClient->generateAuthLink();
 
 Connection::initConnection();
+
+// echo "<pre>";
+// var_dump(User::select());
 
 ?>
 
