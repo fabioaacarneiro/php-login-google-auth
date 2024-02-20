@@ -3,16 +3,24 @@
 namespace app\models;
 
 use app\database\Connection;
+use Exception;
 use PDO;
 
-abstract class User
+class User
 {
 
-    private $pdo = Connection::getConnection();
+    private $pdo;
+
+    public function __construct()
+    {
+        $connection = new Connection();
+        $this->pdo = $connection->getConnection();
+    }
 
     static public function store(string $firstName, string $lastName, string $email, string $password, string $avatar = null)
     {
-        $stmt = static::$pdo->prepare("INSERT INTO users (firstName, lastName, email, password, avatar) VALUES (:nome, :email, :senha)");
+        $user = new static();
+        $stmt = $user->pdo->prepare("INSERT INTO users (firstname, lastname, email, password, avatar) VALUES (:firstName, :lastName, :email, :password, :avatar)");
         $stmt->execute([
             ":firstName" => $firstName,
             ":lastName" => $lastName,
@@ -23,7 +31,9 @@ abstract class User
     }
     static public function update(string $id, string $firstName, string $lastName, string $email, string $password, string $avatar = null)
     {
-        $stmt = static::$pdo->prepare("UPDATE users SET nome = :nome, email = :email, senha = :senha WHERE id = :id");
+        $user = new static();
+
+        $stmt = $user->pdo->prepare("UPDATE users SET firstname = :firstName, lastname = :lastName, email = :email, password = :password, avatar = :avatar WHERE id = :id");
         $stmt->execute([
             ":id" => $id,
             ":firstName" => $firstName,
@@ -34,23 +44,34 @@ abstract class User
         ]);
     }
 
-    public static function delete($id)
+    public static function delete(int $id)
     {
-        $stmt = static::$pdo->prepare("DELETE FROM usuarios WHERE id = :id");
+        $user = new static();
+        $stmt = $user->pdo->prepare("DELETE FROM public.users  WHERE id = :id");
         $stmt->execute(array(':id' => $id));
     }
 
-    public static function select(string $last = true, int $quantity = null)
+    public static function select(bool $start = false, int $quantity = null)
     {
+        $user = new static();
+        $users = [];
+        $stmt = "";
+
         if (is_null($quantity)) {
-            $stmt = static::$pdo->prepare("SELECT * FROM public.users");
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $users;
+            $stmt = $user->pdo->prepare("SELECT * FROM public.users");
         } else {
-            $order = ($last) ? "DESC" : "ASC";
-            $stmt = static::$pdo->prepare("SELECT * FROM public.users ORDER BY id $order LIMIT $quantity");
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $users;
+            $stmt = $user->pdo->prepare("SELECT * FROM public.users LIMIT " . $quantity);
         }
+
+        try {
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $th) {
+            $th->getMessage();
+        }
+
+        $users = ($start) ? $users : array_reverse($users);
+
+        return $users;
     }
 }

@@ -57,7 +57,7 @@ class Connection
             lastName VARCHAR(50),
             email VARCHAR(150),
             password VARCHAR(255),
-            avatar VARCHAR(255)
+            avatar VARCHAR(255) NULL
         )");
 
         return $pdo;
