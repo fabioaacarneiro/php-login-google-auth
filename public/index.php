@@ -1,14 +1,26 @@
 <?php
 
 use app\database\Connection;
+use app\library\Authenticate;
 use app\library\GoogleClient;
 use app\models\User;
 
 require "../vendor/autoload.php";
 
+session_start();
+
 $googleClient = new GoogleClient();
 $googleClient->init();
-$googleClient->authorized();
+$auth = new Authenticate;
+
+if ($googleClient->authorized()) {
+    $auth->authGoogle($googleClient->getData());
+    echo "authenticated!";
+}
+
+if (isset($_GET["logout"])) {
+    $auth->logout();
+}
 
 $authUrl = $googleClient->generateAuthLink();
 
@@ -36,7 +48,23 @@ Connection::initConnection();
 </head>
 
 <body>
+
+    <div class="header header-primary header-end">
+        <?php
+        if (isset($_SESSION["user"])) {
+            echo '<a href="?logout=true" class="btn btn-alert">Deslogar</a>';
+        } else {
+            echo '<a href="/signup" class="btn btn-secondary">Cadastrar</a>';
+        }
+        ?>
+    </div>
+
     <div class="container">
+        <?php
+        if (isset($_SESSION["user"])) {
+            echo '<p class="alert alert-success">Olá, ' . $_SESSION["user"]->firstname . ' ' . $_SESSION["user"]->lastname . '</p>';
+        }
+        ?>
         <form class="form-container" action="">
             <input class="form-input" type="text" name="email" placeholder="email">
             <input class="form-input" type="text" name="password" placeholder="password">

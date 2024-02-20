@@ -44,7 +44,10 @@ class GoogleClient
             $googleService = new Oauth2($this->client);
             $this->data = $googleService->userinfo->get();
             // var_dump($this->data);
+            return true;
         }
+
+        return false;
     }
 
     public function getData()

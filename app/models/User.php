@@ -74,4 +74,20 @@ class User
 
         return $users;
     }
+
+    public static function selectBy(string $field, mixed $value)
+    {
+        $user = new static();
+        $userFound = null;
+
+        try {
+            $stmt = $user->pdo->prepare("SELECT * FROM public.users WHERE $field = :$field");
+            $stmt->execute([$field => $value]);
+            $userFound = $stmt->fetchObject();
+        } catch (Exception $excp) {
+            var_dump($excp->getMessage());
+        }
+
+        return $userFound;
+    }
 }

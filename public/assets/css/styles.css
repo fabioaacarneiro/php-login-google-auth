@@ -7,8 +7,9 @@
 
 .container {
     display: flex;
-    justify-content: center;
-    align-items: start;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
     margin-top: 10px;
     padding: 15px;
 }
@@ -62,4 +63,67 @@
 .btn-primary:hover {
     background: #77f;
     color: #fff;
+}
+
+.btn-alert {
+    background: rgb(238, 211, 34);
+    color: #000;
+}
+
+.btn-alert:hover {
+    background: rgb(247, 215, 7);
+    color: #333;
+}
+
+.btn-secondary {
+    background: rgb(5, 180, 255);
+    color: #eee;
+}
+
+.btn-secondary:hover {
+    background: rgb(36, 189, 255);
+    color: #fff;
+}
+
+.alert {
+    background: #c8c8ff;
+    border: transparent;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    color: #222;
+    font-size: 14px;
+    font-style: italic;
+    width: 300px;
+}
+
+.alert-success {
+    background: rgb(95, 239, 145);
+}
+
+.header {
+    background: #c8c8ff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header-primary {
+    background: #55f;
+    color: #eee;
+    padding: 5px;
+}
+
+.header-start {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.header-end {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
 }
