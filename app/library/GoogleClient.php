@@ -34,5 +34,9 @@ class GoogleClient
 
     public function authorized()
     {
+        if (isset($_GET["code"])) {
+            $token = $this->client->fetchAccessTokenWithAuthCode($_GET["code"]);
+            var_dump($token);
+        }
     }
 }

@@ -14,15 +14,15 @@ $authUrl = $googleClient->generateAuthLink();
 
 Connection::initConnection();
 
-echo "<pre>";
+// echo "<pre>";
 // User::store("Fabio", "Carneiro", "fabio@email.com", "senha");
 // User::store("Benidito", "Cunha", "bene@email.com", "senha");
 // User::update(6, "Benedito", "Cunha", "bene@email.com", "senha");
 
 // User::delete(7);
 
-$usersList = User::select(false);
-var_dump($usersList);
+// $usersList = User::select(false);
+// var_dump($usersList);
 ?>
 
 <!DOCTYPE html>

@@ -41,7 +41,7 @@ services:
     expose:
       - 9003
     ports:
-      - 80:80
+      - 9090:80
   postgres:
     image: postgres:15
     container_name: postgres

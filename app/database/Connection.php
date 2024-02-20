@@ -7,7 +7,6 @@ use Dotenv\Dotenv;
 
 class Connection
 {
-
     private $dotenv;
     private $databaseManager = "";
     private $host = "";
