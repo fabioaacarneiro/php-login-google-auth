@@ -44,7 +44,7 @@
     border: transparent;
     border-radius: 5px;
     margin: 5px;
-    padding: 5px;
+    padding: 5px 15px;
     text-align: center;
     text-decoration: none;
     color: #444;
@@ -90,17 +90,16 @@
     border: transparent;
     border-radius: 5px;
     margin: 5px;
-    padding: 5px;
+    padding: 5px 15px;
     text-align: center;
     text-decoration: none;
     color: #222;
     font-size: 14px;
     font-style: italic;
-    width: 300px;
 }
 
 .alert-success {
-    background: rgb(95, 239, 145);
+    background: rgb(113, 214, 148);
 }
 
 .header {
